@@ -1,0 +1,53 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(0.25turn, #eac8ca,  #e6c0e9, #8d89a6) ;
+}
+
+.calculator-frame {
+  margin: 2rem;
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(4, 6rem);
+  grid-template-rows: minmax(7rem, auto) repeat(5, 6rem);
+}
+
+.calculator-frame > button {
+  font-size: 2rem;
+  border-radius: 0;
+  border: 1px solid rgba(117, 10, 10, 0.5);
+  background-color: rgba(255, 241, 241, 0.685);
+  outline: none;
+}
+
+.calculator-frame > button:hover,
+.calculator-frame > button:focus       {
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.801);
+}
+
+.two-col {
+  grid-column: span 2;
+}
+
+.output-window {
+  background: linear-gradient( #a51616, #8a0b0b);
+  grid-column: 1/-1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-evenly;
+}
+
+.previous-entry {
+  color:rgba(255, 255, 255, 0.918);
+  font-size: 1rem;
+}
+
+.current-entry {
+  color: white;
+  font-size: 2.5rem;
+}
