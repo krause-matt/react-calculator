@@ -1,6 +1,14 @@
 import { useReducer } from "react";
 import "./app.css";
 
+const ACTIONS = {
+  CHOOSE_NUMBER: "choose-number",
+  CLEAR_SCREEN: "clear-screen",
+  DELETE_NUMBER: "delete-number",
+  MATH_OPERATION: "math-operation",
+  EVALUATE_EQUATION: "evaluate-equation",
+};
+
 function reducer(state, action) {}
 
 function App() {
