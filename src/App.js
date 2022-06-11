@@ -1,11 +1,18 @@
+import { useReducer } from "react";
 import "./app.css";
 
+function reducer(state, action) {}
+
 function App() {
+  const [{ previousEntry, currentEntry, mathFunction }, dispatch] = useReducer(
+    reducer,
+    {}
+  );
   return (
     <div className="calculator-frame">
       <div className="output-window">
-        <div className="previous-entry">234,234</div>
-        <div className="current-entry">224,243,223,673</div>
+        <div className="previous-entry"></div>
+        <div className="current-entry"></div>
       </div>
       <button className="two-col">AC</button>
       <button>DEL</button>
