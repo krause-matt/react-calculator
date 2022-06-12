@@ -35,16 +35,19 @@ body {
 
 .output-window {
   background: linear-gradient( #a51616, #8a0b0b);
+  padding: 0.5rem;
   grid-column: 1/-1;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   justify-content: space-evenly;
+  word-wrap: break-word;
+  word-break: break-all;
 }
 
 .previous-entry {
   color:rgba(255, 255, 255, 0.918);
-  font-size: 1rem;
+  font-size: 1.5rem;
 }
 
 .current-entry {
