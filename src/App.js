@@ -3,6 +3,7 @@ import "./app.css";
 import NumberButton from "./NumberButton.js";
 import FunctionButton from "./FunctionButton.js";
 import ClearButton from "./ClearButton";
+import DeleteButton from "./DeleteButton";
 
 export const ACTIONS = {
   CHOOSE_NUMBER: "choose-number",
@@ -40,6 +41,18 @@ function reducer(state, { action, payload }) {
       }
     case ACTIONS.CLEAR_SCREEN:
       return {};
+    case ACTIONS.DELETE_NUMBER:
+      if (!state.currentEntry) {
+        return { state };
+      } else {
+        return {
+          ...state,
+          currentEntry: state.currentEntry.slice(
+            0,
+            state.currentEntry.length - 1
+          ),
+        };
+      }
 
     default:
       console.log("default");
@@ -61,7 +74,7 @@ function App() {
         <div className="current-entry">{currentEntry}</div>
       </div>
       <ClearButton className="two-col" dispatch={dispatch} clearText="AC" />
-      <button>DEL</button>
+      <DeleteButton dispatch={dispatch} deleteText="DEL" />
       <FunctionButton dispatch={dispatch} math="/" />
       <NumberButton dispatch={dispatch} number="1" />
       <NumberButton dispatch={dispatch} number="2" />
