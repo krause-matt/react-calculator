@@ -2,6 +2,7 @@ import { useReducer } from "react";
 import "./app.css";
 import NumberButton from "./NumberButton.js";
 import FunctionButton from "./FunctionButton.js";
+import ClearButton from "./ClearButton";
 
 export const ACTIONS = {
   CHOOSE_NUMBER: "choose-number",
@@ -16,9 +17,11 @@ function reducer(state, { action, payload }) {
     case ACTIONS.CHOOSE_NUMBER:
       if (
         !state.currentEntry &&
-        (payload.number == "0" || payload.number == ".")
+        (payload.number === "0" || payload.number === ".")
       ) {
         return { state };
+      } else if (payload.number === "." && state.currentEntry.includes(".")) {
+        return { ...state, currentEntry: state.currentEntry };
       } else {
         return {
           ...state,
@@ -35,6 +38,8 @@ function reducer(state, { action, payload }) {
           mathFunction: payload.math,
         };
       }
+    case ACTIONS.CLEAR_SCREEN:
+      return {};
 
     default:
       console.log("default");
@@ -55,7 +60,7 @@ function App() {
         </div>
         <div className="current-entry">{currentEntry}</div>
       </div>
-      <button className="two-col">AC</button>
+      <ClearButton className="two-col" dispatch={dispatch} clearText="AC" />
       <button>DEL</button>
       <FunctionButton dispatch={dispatch} math="/" />
       <NumberButton dispatch={dispatch} number="1" />
