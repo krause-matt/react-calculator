@@ -29,21 +29,66 @@ function reducer(state, { action, payload }) {
           currentEntry: `${state.currentEntry || ""}${payload.number}`,
         };
       }
+
     case ACTIONS.MATH_OPERATION:
-      if (!state.currentEntry) {
-        return { state };
-      } else {
+      if (!state.currentEntry && !state.previousEntry) {
+        return {};
+      }
+      if (state.currentEntry && !state.previousEntry) {
         return {
-          previousEntry: state.currentEntry,
           currentEntry: "",
+          previousEntry: state.currentEntry,
           mathFunction: payload.math,
         };
       }
+      if (state.currentEntry && state.mathFunction) {
+        if (payload.math === "/") {
+          return {
+            currentEntry: "",
+            previousEntry: state.previousEntry / state.currentEntry,
+            mathFunction: payload.math,
+          };
+        }
+        if (payload.math === "*") {
+          return {
+            currentEntry: "",
+            previousEntry: state.previousEntry * state.currentEntry,
+            mathFunction: payload.math,
+          };
+        }
+        if (payload.math === "+") {
+          return {
+            currentEntry: "",
+            previousEntry: +state.previousEntry + +state.currentEntry,
+            mathFunction: payload.math,
+          };
+        }
+        if (payload.math === "-") {
+          return {
+            currentEntry: "",
+            previousEntry: +state.previousEntry + +state.currentEntry,
+            mathFunction: payload.math,
+          };
+        }
+      }
+      if (!state.currentEntry && state.mathFunction) {
+        return { ...state, mathFunction: payload.math };
+      }
+
     case ACTIONS.CLEAR_SCREEN:
       return {};
+
     case ACTIONS.DELETE_NUMBER:
       if (!state.currentEntry) {
-        return { state };
+        if (!state.mathFunction) {
+          return { ...state };
+        } else {
+          return {
+            currentEntry: state.previousEntry,
+            previousEntry: "",
+            mathFunction: "",
+          };
+        }
       } else {
         return {
           ...state,
@@ -87,7 +132,7 @@ function App() {
       <NumberButton dispatch={dispatch} number="7" />
       <NumberButton dispatch={dispatch} number="8" />
       <NumberButton dispatch={dispatch} number="9" />
-      <FunctionButton dispatch={dispatch} math="*" />
+      <FunctionButton dispatch={dispatch} math="-" />
       <NumberButton dispatch={dispatch} number="0" />
       <NumberButton dispatch={dispatch} number="." />
       <button className="two-col">=</button>
