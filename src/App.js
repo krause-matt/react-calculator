@@ -4,6 +4,7 @@ import NumberButton from "./NumberButton.js";
 import FunctionButton from "./FunctionButton.js";
 import ClearButton from "./ClearButton";
 import DeleteButton from "./DeleteButton";
+import EqualsButton from "./EqualsButton";
 
 export const ACTIONS = {
   CHOOSE_NUMBER: "choose-number",
@@ -66,7 +67,7 @@ function reducer(state, { action, payload }) {
         if (payload.math === "-") {
           return {
             currentEntry: "",
-            previousEntry: +state.previousEntry + +state.currentEntry,
+            previousEntry: +state.previousEntry - +state.currentEntry,
             mathFunction: payload.math,
           };
         }
@@ -74,7 +75,39 @@ function reducer(state, { action, payload }) {
       if (!state.currentEntry && state.mathFunction) {
         return { ...state, mathFunction: payload.math };
       }
-
+    case ACTIONS.EVALUATE_EQUATION:
+      if (!state.currentEntry || !state.previousEntry || !state.mathFunction) {
+        return { ...state };
+      } else {
+        if (state.mathFunction === "/") {
+          return {
+            currentEntry: state.previousEntry / state.currentEntry,
+            previousEntry: "",
+            mathFunction: "",
+          };
+        }
+        if (state.mathFunction === "*") {
+          return {
+            currentEntry: state.previousEntry * state.currentEntry,
+            previousEntry: "",
+            mathFunction: "",
+          };
+        }
+        if (state.mathFunction === "+") {
+          return {
+            currentEntry: +state.previousEntry + +state.currentEntry,
+            previousEntry: "",
+            mathFunction: "",
+          };
+        }
+        if (state.mathFunction === "-") {
+          return {
+            currentEntry: +state.previousEntry - +state.currentEntry,
+            previousEntry: "",
+            mathFunction: "",
+          };
+        }
+      }
     case ACTIONS.CLEAR_SCREEN:
       return {};
 
@@ -135,7 +168,7 @@ function App() {
       <FunctionButton dispatch={dispatch} math="-" />
       <NumberButton dispatch={dispatch} number="0" />
       <NumberButton dispatch={dispatch} number="." />
-      <button className="two-col">=</button>
+      <EqualsButton className="two-col" dispatch={dispatch} equalSign="=" />
     </div>
   );
 }
