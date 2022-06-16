@@ -75,6 +75,7 @@ function reducer(state, { action, payload }) {
       if (!state.currentEntry && state.mathFunction) {
         return { ...state, mathFunction: payload.math };
       }
+
     case ACTIONS.EVALUATE_EQUATION:
       if (!state.currentEntry || !state.previousEntry || !state.mathFunction) {
         return { ...state };
@@ -108,6 +109,7 @@ function reducer(state, { action, payload }) {
           };
         }
       }
+
     case ACTIONS.CLEAR_SCREEN:
       return {};
 
@@ -123,11 +125,12 @@ function reducer(state, { action, payload }) {
           };
         }
       } else {
+        const currentEntryString = state.currentEntry.toString();
         return {
           ...state,
-          currentEntry: state.currentEntry.slice(
+          currentEntry: currentEntryString.slice(
             0,
-            state.currentEntry.length - 1
+            currentEntryString.length - 1
           ),
         };
       }
