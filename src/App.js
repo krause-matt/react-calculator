@@ -32,6 +32,7 @@ function reducer(state, { action, payload }) {
       }
 
     case ACTIONS.MATH_OPERATION:
+      console.log("state", state);
       if (!state.currentEntry && !state.previousEntry) {
         return {};
       }
@@ -43,28 +44,28 @@ function reducer(state, { action, payload }) {
         };
       }
       if (state.currentEntry && state.mathFunction) {
-        if (payload.math === "/") {
+        if (state.mathFunction === "/") {
           return {
             currentEntry: "",
             previousEntry: state.previousEntry / state.currentEntry,
             mathFunction: payload.math,
           };
         }
-        if (payload.math === "*") {
+        if (state.mathFunction === "*") {
           return {
             currentEntry: "",
             previousEntry: state.previousEntry * state.currentEntry,
             mathFunction: payload.math,
           };
         }
-        if (payload.math === "+") {
+        if (state.mathFunction === "+") {
           return {
             currentEntry: "",
             previousEntry: +state.previousEntry + +state.currentEntry,
             mathFunction: payload.math,
           };
         }
-        if (payload.math === "-") {
+        if (state.mathFunction === "-") {
           return {
             currentEntry: "",
             previousEntry: +state.previousEntry - +state.currentEntry,
