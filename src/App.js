@@ -2,9 +2,6 @@ import { useReducer } from "react";
 import "./app.css";
 import NumberButton from "./NumberButton.js";
 import FunctionButton from "./FunctionButton.js";
-import ClearButton from "./ClearButton";
-import DeleteButton from "./DeleteButton";
-import EqualsButton from "./EqualsButton";
 
 export const ACTIONS = {
   CHOOSE_NUMBER: "choose-number",
@@ -21,7 +18,7 @@ function reducer(state, { action, payload }) {
         !state.currentEntry &&
         (payload.number === "0" || payload.number === ".")
       ) {
-        return { state };
+        return state;
       } else if (payload.number === "." && state.currentEntry.includes(".")) {
         return { ...state, currentEntry: state.currentEntry };
       } else {
@@ -76,16 +73,18 @@ function reducer(state, { action, payload }) {
       if (!state.currentEntry && state.mathFunction) {
         return { ...state, mathFunction: payload.math };
       }
+      break;
 
     case ACTIONS.EVALUATE_EQUATION:
       if (!state.currentEntry || !state.previousEntry || !state.mathFunction) {
-        return { ...state };
+        return state;
       } else {
         if (state.mathFunction === "/") {
           return {
             currentEntry: state.previousEntry / state.currentEntry,
             previousEntry: "",
             mathFunction: "",
+            calcResult: true,
           };
         }
         if (state.mathFunction === "*") {
@@ -93,6 +92,7 @@ function reducer(state, { action, payload }) {
             currentEntry: state.previousEntry * state.currentEntry,
             previousEntry: "",
             mathFunction: "",
+            calcResult: true,
           };
         }
         if (state.mathFunction === "+") {
@@ -100,6 +100,7 @@ function reducer(state, { action, payload }) {
             currentEntry: +state.previousEntry + +state.currentEntry,
             previousEntry: "",
             mathFunction: "",
+            calcResult: true,
           };
         }
         if (state.mathFunction === "-") {
@@ -107,9 +108,11 @@ function reducer(state, { action, payload }) {
             currentEntry: +state.previousEntry - +state.currentEntry,
             previousEntry: "",
             mathFunction: "",
+            calcResult: true,
           };
         }
       }
+      break;
 
     case ACTIONS.CLEAR_SCREEN:
       return {};
@@ -117,7 +120,7 @@ function reducer(state, { action, payload }) {
     case ACTIONS.DELETE_NUMBER:
       if (!state.currentEntry) {
         if (!state.mathFunction) {
-          return { ...state };
+          return state;
         } else {
           return {
             currentEntry: state.previousEntry,
@@ -126,18 +129,26 @@ function reducer(state, { action, payload }) {
           };
         }
       } else {
-        const currentEntryString = state.currentEntry.toString();
-        return {
-          ...state,
-          currentEntry: currentEntryString.slice(
-            0,
-            currentEntryString.length - 1
-          ),
-        };
+        if (state.calcResult) {
+          return {
+            ...state,
+            currentEntry: "",
+            calcResult: false,
+          };
+        } else {
+          const currentEntryString = state.currentEntry.toString();
+          return {
+            ...state,
+            currentEntry: currentEntryString.slice(
+              0,
+              currentEntryString.length - 1
+            ),
+          };
+        }
       }
 
     default:
-      console.log("default");
+      console.log("Error");
   }
 }
 
@@ -155,8 +166,21 @@ function App() {
         </div>
         <div className="current-entry">{currentEntry}</div>
       </div>
-      <ClearButton className="two-col" dispatch={dispatch} clearText="AC" />
-      <DeleteButton dispatch={dispatch} deleteText="DEL" />
+      <button
+        className="two-col"
+        onClick={() => {
+          dispatch({ action: ACTIONS.CLEAR_SCREEN });
+        }}
+      >
+        AC
+      </button>
+      <button
+        onClick={() => {
+          dispatch({ action: ACTIONS.DELETE_NUMBER });
+        }}
+      >
+        DEL
+      </button>
       <FunctionButton dispatch={dispatch} math="/" />
       <NumberButton dispatch={dispatch} number="1" />
       <NumberButton dispatch={dispatch} number="2" />
@@ -172,7 +196,14 @@ function App() {
       <FunctionButton dispatch={dispatch} math="-" />
       <NumberButton dispatch={dispatch} number="0" />
       <NumberButton dispatch={dispatch} number="." />
-      <EqualsButton className="two-col" dispatch={dispatch} equalSign="=" />
+      <button
+        className="two-col"
+        onClick={() => {
+          dispatch({ action: ACTIONS.EVALUATE_EQUATION });
+        }}
+      >
+        =
+      </button>
     </div>
   );
 }
