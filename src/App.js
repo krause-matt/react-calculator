@@ -29,7 +29,6 @@ function reducer(state, { action, payload }) {
       }
 
     case ACTIONS.MATH_OPERATION:
-      console.log("state", state);
       if (!state.currentEntry && !state.previousEntry) {
         return {};
       }
@@ -152,6 +151,27 @@ function reducer(state, { action, payload }) {
   }
 }
 
+const addCommas = (numCheck) => {
+  if (typeof numCheck === "number") {
+    numCheck = numCheck.toString();
+  }
+  if (numCheck) {
+    if (numCheck.includes(".")) {
+      const [integer, decimal] = numCheck.split(".");
+      const intToString = parseInt(integer);
+      const decimalToString = parseInt(decimal);
+      const formattedInt = Intl.NumberFormat("en-US").format(intToString);
+      const formattedDecimal =
+        Intl.NumberFormat("en-US").format(decimalToString);
+      return `${formattedInt}.${formattedDecimal}`;
+    } else {
+      const intToString = parseInt(numCheck);
+      const formattedInt = Intl.NumberFormat("en-US").format(intToString);
+      return formattedInt;
+    }
+  }
+};
+
 function App() {
   const [{ currentEntry, previousEntry, mathFunction }, dispatch] = useReducer(
     reducer,
@@ -162,9 +182,9 @@ function App() {
     <div className="calculator-frame">
       <div className="output-window">
         <div className="previous-entry">
-          {previousEntry} {mathFunction}
+          {addCommas(previousEntry)} {mathFunction}
         </div>
-        <div className="current-entry">{currentEntry}</div>
+        <div className="current-entry">{addCommas(currentEntry)}</div>
       </div>
       <button
         className="two-col"
